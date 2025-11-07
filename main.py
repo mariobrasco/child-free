@@ -7,3 +7,8 @@ def login(username, password):
 username = input("Enter username: ")
 password = input("Enter password: ")
 login(username, password)
+
+a = 13
+b = 9
+c = a * b
+print(c)
