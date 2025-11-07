@@ -16,4 +16,4 @@ b = 9
 c = a * b
 print(c)
 
-print("Nurseha")
+print("AN")
