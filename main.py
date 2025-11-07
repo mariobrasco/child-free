@@ -1,5 +1,8 @@
+USERNAME_SYSTEM = "admin"
+PASSWORD_SYSTEM = "secret"
+
 def login(username, password):
-    if username == "admin" and password == "secret":
+    if username == USERNAME_SYSTEM and password == PASSWORD_SYSTEM:
         print("Login successful!")
     else:
         print("Login failed!")
