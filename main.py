@@ -1,49 +1,69 @@
-import os
-import sys
-import getpass
-import hmac
-import hashlib
-from typing import Tuple
+id_nav = 0
+jumlah_nav = 0
 
-# Defaults (override via environment variables APP_USERNAME and APP_PASSWORD_HASH)
-DEFAULT_USERNAME = "admin"
-DEFAULT_PASSWORD_HASH = hashlib.sha256(b"secret").hexdigest()
+#Menu Navigasi
+def nav_belum_login():
+    global jumlah_nav
+    global id_nav
+    id_nav = 0
+    jumlah_nav = 2
+    print("============== MENU NAVIGASI ===============")
+    print("1. Login") 
+    print("2. Registrasi")
+    print("0. Keluar")
+    print("============================================")
 
-USERNAME_SYSTEM = os.getenv("APP_USERNAME", DEFAULT_USERNAME)
-PASSWORD_HASH_SYSTEM = os.getenv("APP_PASSWORD_HASH", DEFAULT_PASSWORD_HASH)
+def nav_sudah_login():
+    global jumlah_nav
+    global id_nav
+    id_nav = 1
+    jumlah_nav = 3
+    print("============== MENU NAVIGASI ===============")
+    print("1. Profil Saya") 
+    print("2. For You Page")
+    print("3. Kembali ke Menu Sebelumnya")
+    print("0. Keluar")
+    print("============================================")
+#Menu Navigasi--
 
-MAX_ATTEMPTS = 3
+def nav_hub():
+    global input_navigasi
+    
+    if (id_nav == 0):
+        nav_belum_login()
+        input_navigasi = int(input(f"Masukkan angka untuk navigasi (1-{jumlah_nav}) atau 0 untuk keluar: "))
+    elif (id_nav == 1):
+        nav_sudah_login()
+        input_navigasi = int(input(f"Masukkan angka untuk navigasi (1-{jumlah_nav}) atau 0 untuk keluar: "))
 
 
-def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+while True:
+    
+    nav_hub()
 
-
-def login(username: str, password: str) -> bool:
-    """Return True if credentials match (uses timing-safe comparison)."""
-    user_ok = hmac.compare_digest(username, USERNAME_SYSTEM)
-    pass_ok = hmac.compare_digest(hash_password(password), PASSWORD_HASH_SYSTEM)
-    return user_ok and pass_ok
-
-
-def prompt_credentials() -> Tuple[str, str]:
-    username = input("Enter username: ").strip()
-    password = getpass.getpass("Enter password: ")
-    return username, password
-
-
-def main() -> None:
-    for attempt in range(1, MAX_ATTEMPTS + 1):
-        username, password = prompt_credentials()
-        if login(username, password):
-            print("Login successful!")
-            sys.exit(0)
+    #Login
+    if (id_nav == 0 and input_navigasi == 1):
+        print("============================ MENU LOGIN =================================")
+        print("Jika Ingin membatalkan login, ketik 'batal' pada username atau password")
+        
+        input_username = input("Masukkan username: ")
+        if (input_username == "batal"):
+            print("Login dibatalkan, kembali ke menu navigasi.")
+        elif (input_username != "batal"):
+            input_password = input("Masukkan password: ")
+            if (input_password == "batal"):
+                print("Login dibatalkan, kembali ke menu navigasi.")
+                
+        print("=========================================================================")
+        if (input_username == "batal" or input_password == "batal"):
+            print("Login dibatalkan, kembali ke menu navigasi.")
+        elif (input_username == "admin" or input_password == "admin123"):
+            print(f"Berhasil login sebagai {input_username}.")
+            id_nav = 1 
         else:
-            remaining = MAX_ATTEMPTS - attempt
-            print(f"Login failed! Attempts remaining: {remaining}")
-    print("Maximum attempts exceeded. Exiting.")
-    sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
+            print("Gagal login, username atau password salah.")
+    #Login--
+    
+    if (input_navigasi == 0):
+        print("Keluar dari program, Terimakasih Telah menggunakan program ini  .")
+        break
